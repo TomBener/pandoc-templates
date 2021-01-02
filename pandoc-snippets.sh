@@ -14,3 +14,13 @@ pandoc -f html -t markdown --request-header User-Agent:"Mozilla/5.0" \
   https://www.fsf.org  # a custom User-Agent
 
 pandoc --wrap=none -o output.md input.docx  # remove unnecessary line-break
+
+pandoc --wrap=none -t commonmark input.docx -o output.md  # no escape in markdown *****
+
+pandoc --reference-doc twocolumns.docx -o UsersGuide.docx MANUAL.txt  # docx with a reference docx
+
+pandoc -s --bibliography biblio.json --citeproc --csl chicago-fullnote-bibliography.csl CITATIONS -o example24b.html  # citations
+
+pandoc -s math.tex -o example30.docx  # LaTeX to docx
+
+pandoc MANUAL.txt --pdf-engine=xelatex -o example13.pdf  # markdown to pdf
