@@ -13,7 +13,7 @@ input.md -o docx/main.docx
 # Generate `main.html` via pandoc
 pandoc -s --self-contained -C \
 -L lua-filters/rsbc.lua --toc \
--c html/github.css \
+-c https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css \
 input.md -o html/main.html
 
 # Generate `input.tex` via pandoc
@@ -24,8 +24,9 @@ pandoc --natbib ../input.md -o input.tex
 sed -i '' -e 's/citealp/citeyear/g' input.tex
 
 # Generate `main.pdf` via latexmk
-latexmk -xelatex main.tex \
--output-directory=auxiliary
+latexmk -quiet \
+-xelatex main.tex \
+-outdir=auxiliary
 
 # Move `main.pdf` to main folder
 cd auxiliary
