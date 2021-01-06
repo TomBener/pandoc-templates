@@ -7,7 +7,7 @@ sed -i '' -e 's/@misc{/@online{/g' \
 
 # Generate `main.docx` via pandoc
 pandoc -C -L lua-filters/rsbc.lua \
---reference-doc docx/minion-reference.docx \
+--reference-doc docx/ref.docx \
 input.md -o docx/main.docx
 
 # Generate `main.html` via pandoc
