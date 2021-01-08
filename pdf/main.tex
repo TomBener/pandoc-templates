@@ -14,6 +14,7 @@
 \usepackage{xcolor}
 \definecolor{citeblue}{rgb}{0.19,0.54,0.92} % 浅蓝色
 \definecolor{winered}{rgb}{0.5,0,0} % 血红色
+\usepackage[nottoc]{tocbibind}
 
 %%%%%%%%%%%%%%%%%%%% hyperref 宏包设置
 \usepackage[
@@ -76,9 +77,7 @@
 % 导入 Pandoc 转换得到的 input.tex
 \input{input.tex}
 
-% 参考文献
-\phantomsection
-\addcontentsline{toc}{section}{参考文献}
+% 引入参考文献 `ref.bib`
 \bibliography{../ref}
 
 \end{document}

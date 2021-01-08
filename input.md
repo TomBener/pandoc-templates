@@ -2,6 +2,7 @@
 title: Input in Markdown, Outputs with DOCX, PDF, HTML
 reference-section-title: 参考文献
 link-citations: true
+linkReferences: true
 bibliography: [ref.bib]
 csl: china-national-standard-gb-t-7714-2015-author-date.csl
 ---
