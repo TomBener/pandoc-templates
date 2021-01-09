@@ -6,19 +6,20 @@ sed -i '' -e 's/@misc{/@online{/g' \
 -e 's|'"note = {"'|'"urldate = {"'|g' ref.bib
 
 # Generate `main.docx` via pandoc
-pandoc -C -L lua-filters/rsbc.lua \
+pandoc -F pandoc-crossref -C  \
+-L lua-filters/rsbc.lua \
 --reference-doc docx/ref.docx \
 input.md -o docx/main.docx
 
 # Generate `main.html` via pandoc
-pandoc -s --self-contained -C \
--L lua-filters/rsbc.lua --toc \
+pandoc -s --self-contained -F pandoc-crossref \
+-C -L lua-filters/rsbc.lua --toc \
 -c https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css \
 input.md -o html/main.html
 
 # Generate `input.tex` via pandoc
 cd pdf
-pandoc --natbib ../input.md -o input.tex
+pandoc -F pandoc-crossref --natbib ../input.md -o input.tex
 
 # Replace citealp with citeyear in `input.tex`
 sed -i '' -e 's/citealp/citeyear/g' input.tex
@@ -32,6 +33,6 @@ latexmk -quiet \
 cd auxiliary
 mv main.pdf ../
 
-# Remove auxiliary folder
+# Remove the auxiliary folder
 cd ..
 rm -r auxiliary

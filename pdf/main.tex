@@ -1,12 +1,14 @@
 \documentclass[12pt, a4paper]{article}
 
 \usepackage[fontset=none]{ctex}
-\usepackage{newtxtext, newtxmath}
+\setmainfont[Scale=1.15, Ligatures=NoCommon]{MinionPro-Regular}
+\setmonofont{JetBrainsMono-Regular}
 \setCJKmainfont[BoldFont = SourceHanSerifSC-Bold,
-        ItalicFont = KaiTi]{SimSun}
+		ItalicFont = KaiTi]{SourceHanSerifSC-Regular}
+%\usepackage{newtxtext, newtxmath}
 % make \% use italy font for newtx
-\let\origpercent\%
-\renewcommand{\%}{\textit{\origpercent}}
+%\let\origpercent\%
+%\renewcommand{\%}{\textit{\origpercent}}
 
 \usepackage{microtype} % 改善单词、字母的间距
 \usepackage{setspace} % 间距宏包
@@ -38,6 +40,16 @@
 
 \usepackage{graphicx}
 \graphicspath{{..}{images/}}  % 图片文件夹路径
+
+\usepackage{caption}
+\captionsetup{
+	hypcap=true, % 链接跳转到浮动体本身
+	font={bf},
+	%labelsep=period,
+}
+
+\captionsetup[table]{skip=5pt}
+\captionsetup[figure]{skip=10pt}
 
 \usepackage{longtable}
 \usepackage{booktabs}
