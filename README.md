@@ -11,10 +11,10 @@ $ ./make.sh
 Or
 
 ```sh
-$ zsh make.sh
+$ sh make.sh
 ```
 
-## Extra issues to be fixed with generated main.docx
+## Extra issues to be fixed with generated `main.docx`
 
 ### `lang="en-US"` in `.csl`
 
@@ -33,5 +33,6 @@ Replace `等` with `et al.` for Non-Chinese authors (with wildcard character)
 ### Others
 
 - Replace `， ` with `，`, `。 ` with `。` etc. for removing space before multiple 'AuthorInText' citations 
-- Sort Chinese bibliography alphabetically according to the pinyin of authors.
+- Sort Chinese bibliography alphabetically according to the pinyin of authors (Be carefule of the polyphone character)
 - Remove the number before `参考文献`
+- Change the language of Chinese texts for correcting the quotation mark
