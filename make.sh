@@ -6,10 +6,11 @@ sed -i '' -e 's/@misc{/@online{/g' \
 -e 's|'"note = {"'|'"urldate = {"'|g' ref.bib
 
 # Generate `main.docx` via pandoc
-pandoc -F pandoc-crossref -C  \
+pandoc -F pandoc-crossref -C \
 -L lua-filters/rsbc.lua \
 --reference-doc docx/ref.docx \
-input.md -o docx/main.docx
+input.md -f markdown+autolink_bare_uris \
+-t docx -o docx/main.docx
 
 # Generate `main.html` via pandoc
 pandoc -s --self-contained -F pandoc-crossref \
@@ -19,7 +20,9 @@ input.md -o html/main.html
 
 # Generate `input.tex` via pandoc
 cd pdf
-pandoc -F pandoc-crossref --natbib ../input.md -o input.tex
+pandoc -F pandoc-crossref --natbib ../input.md \
+-f markdown+smart+autolink_bare_uris \
+-t tex -o input.tex
 
 # Replace citealp with citeyear in `input.tex`
 sed -i '' -e 's/citealp/citeyear/g' input.tex
