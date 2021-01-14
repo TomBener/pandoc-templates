@@ -16,19 +16,15 @@ $ sh make.sh
 
 ## Extra issues to be fixed with generated `main.docx`
 
-### `lang="en-US"` in `.csl`
+### Issues on `et al.` and `等`
 
-Replace `et al.` with `等` for Chinese authors (with wildcard character)
+1. `lang="en-US"` in the `.csl` file
 
-1. Find `[!^1-^127] et al.` and `[!^1-^127], et al.`, and replace both with `^& ƒ`
-2. Find `et al. ƒ`, and replace with `等`
+Replace `([、-﨩])(? )(et al.)` with `\1\2等` for Chinese authors (with wildcard character)
 
-### `lang="zh-CN"` in `.csl`
+2. `lang="zh-CN"` in the `.csl` file
 
-Replace `等` with `et al.` for Non-Chinese authors (with wildcard character)
-
-1. Find `[a-zA-Z] 等` and `[a-zA-Z], 等`, and replace both with `^& ƒ`
-2. Find `et al. ƒ`, and replace with `等`
+Replace `([a-zA-Z])(? )(等)` with `\1\2et al.` for Non-Chinese authors (with wildcard character)
 
 ### Others
 
