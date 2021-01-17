@@ -1,24 +1,28 @@
-\documentclass[12pt, a4paper]{article}
+\documentclass[12pt,a4paper]{article}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 \usepackage[fontset=none]{ctex}
 \setmainfont[Scale=1.15, Ligatures=NoCommon]{MinionPro-Regular}
 \setmonofont{JetBrainsMono-Regular}
 \setCJKmainfont[BoldFont = SourceHanSerifSC-Bold,
 		ItalicFont = KaiTi]{SourceHanSerifSC-Regular}
+\setCJKmonofont{FangSong}
 %\usepackage{newtxtext, newtxmath}
 % make \% use italy font for newtx
 %\let\origpercent\%
 %\renewcommand{\%}{\textit{\origpercent}}
-
-\usepackage{microtype} % 改善单词、字母的间距
-\usepackage{setspace} % 间距宏包
+\usepackage{fontawesome5}
+\usepackage{microtype}
+\usepackage{setspace}
 
 \usepackage{xcolor}
-\definecolor{citeblue}{rgb}{0.19,0.54,0.92} % 浅蓝色
-\definecolor{winered}{rgb}{0.5,0,0} % 血红色
-\usepackage[nottoc]{tocbibind}
+\definecolor{citeblue}{rgb}{0.19,0.54,0.92}
+\definecolor{winered}{rgb}{0.5,0,0}
+\definecolor{wordblue}{RGB}{40,85,150}
 
-%%%%%%%%%%%%%%%%%%%% hyperref 宏包设置
+%%%%%%%%%%%%%%%%%%%% hyperref
 \usepackage[
 	colorlinks=true,
 	linkcolor=red,
@@ -35,15 +39,19 @@
 	pdfsubject={},
 	pdfauthor={},
 	pdfkeywords={},
-} % 设置链接参数
-\urlstyle{rm} % 链接为非打字体，与正文字体相同
+}
+\urlstyle{same}
+
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
 
 \usepackage{graphicx}
-\graphicspath{{..}{images/}}  % 图片文件夹路径
+\graphicspath{{..}{images/}}
 
 \usepackage{caption}
 \captionsetup{
-	hypcap=true, % 链接跳转到浮动体本身
+	hypcap=true,
 	font={bf},
 	%labelsep=period,
 }
@@ -51,45 +59,102 @@
 \captionsetup[table]{skip=5pt}
 \captionsetup[figure]{skip=10pt}
 
-\usepackage{longtable}
-\usepackage{booktabs}
-
 \pagestyle{plain}
 \renewcommand*{\thepage}{\footnotesize{\arabic{page}}}
-\setlength{\footskip}{1.5cm} % 正文底部到页脚距离
-\usepackage[margin = 2.5cm]{geometry} % 页边距
+\setlength{\footskip}{1.5cm}
+\usepackage[margin=2.5cm]{geometry}
 
-\usepackage{gbt7714} % 国标参考文献
-\bibliographystyle{gbt7714-author-year}
-\setlength{\bibsep}{3pt} % 参考文献行距
-\renewcommand{\bibfont}{\zihao{5}}  % 参考文献字号
+\usepackage[backend=biber,style=gb7714-2015ay,gblanorder=englishahead]{biblatex}
+\renewcommand{\bibfont}{\small}
+\setlength\bibitemsep{5pt}
+\addbibresource{../ref.bib}
+
+% Hyperlink author name
+% From: https://tex.stackexchange.com/questions/1887/hyperlink-name-with-biblatex-authoryear
+\DeclareCiteCommand{\cite}
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \printtext[bibhyperref]{\usebibmacro{cite}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+\DeclareCiteCommand*{\cite}
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \printtext[bibhyperref]{\usebibmacro{citeyear}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+\DeclareCiteCommand{\parencite}[\mkbibparens]
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+    \printtext[bibhyperref]{\usebibmacro{cite}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+\DeclareCiteCommand*{\parencite}[\mkbibparens]
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+    \printtext[bibhyperref]{\usebibmacro{citeyear}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+\DeclareCiteCommand{\footcite}[\mkbibfootnote]
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+  \printtext[bibhyperref]{ \usebibmacro{cite}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+\DeclareCiteCommand{\footcitetext}[\mkbibfootnotetext]
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \printtext[bibhyperref]{\usebibmacro{cite}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+\DeclareCiteCommand{\textcite}
+  {\boolfalse{cbx:parens}}
+  {\usebibmacro{citeindex}%
+   \printtext[bibhyperref]{\usebibmacro{textcite}}}
+  {\ifbool{cbx:parens}
+     {\bibcloseparen\global\boolfalse{cbx:parens}}
+     {}%
+   \multicitedelim}
+  {\usebibmacro{textcite:postnote}}
+
+\DeclareCiteCommand{\textcite}
+{\boolfalse{cbx:parens}}
+  {\usebibmacro{citeindex}%
+  \printtext[bibhyperref]{\printnames{labelname}%
+    \printtext{ (\printfield{year}\printtext{)}}}}
+{\ifbool{cbx:parens}
+  {\bibcloseparen\global\boolfalse{cbx:parens}}
+  {}%
+\multicitedelim}
+{\usebibmacro{textcite:postnote}}
 
 \usepackage{perpage}
 \MakePerPage{footnote}
-% 脚注编号使用带圈数字
 \usepackage{pifont}
 \newcommand*\dingctr[1]{
 \protect\ding{\number\numexpr\value{#1}+171\relax}}
 \renewcommand*\thefootnote{\dingctr{footnote}}
 \makeatletter
 
-% 脚注编号和文字同高
 \renewcommand\@makefntext[1]{
 \setlength\leftskip{1.2\ccwd}
 \setlength\parindent{2\ccwd}\selectfont
 \noindent\llap{\@thefnmark\ }#1}
 \makeatother
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
 
 \begin{document}
 
-% 导入 Pandoc 转换得到的 input.tex
+% Input `input.tex' converted by Pandoc
 \input{input.tex}
 
-% 引入参考文献 `ref.bib`
-\bibliography{../ref}
+% Bibliography
+\printbibliography[heading=bibintoc]
 
 \end{document}
