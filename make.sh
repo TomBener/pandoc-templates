@@ -47,9 +47,9 @@ cd -
 rm -r docx/unzipped
 
 # Next Need to edit `main.docx` manually
-# 1. Sort the bibliography based on the pinyin of the author
+# 1. Sort the bibliography based on the pinyin of authors
 # 2. Set all Chinese texts wrapped as zh-CN 
-# or find `“[、-﨩]*”`, then change the language to zh-CN
+# or find `“[、-﨩]*”`, then set the language to zh-CN
 
 ################################################################################################# PDF
 # Non-Chinese texts wrapped in quotation marks in `ref.bib`
