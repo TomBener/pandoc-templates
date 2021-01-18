@@ -52,6 +52,17 @@ rm -r docx/unzipped
 # or find `“[、-﨩]*”`, then change the language to zh-CN
 
 ################################################################################################# PDF
+# Non-Chinese texts wrapped in quotation marks in `ref.bib`
+# Double
+perl -CSD -Mutf8 -i -pe 's/([“"])([a-zA-Z0-9\{])/``\2/g; \
+s/([a-zA-Z0-9\}])(["”])/\1'\'\''/g' ref.bib
+# Single
+perl -CSD -Mutf8 -i -pe 's/([‘'\''])([a-zA-Z0-9\{])/`\2/g; \
+s/([a-zA-Z0-9\}])(’)/\1'\''/g' ref.bib
+
+# The possessive form
+sed -i '' -E 's/([a-zA-Z\}])([`‘’])s/\1'\''s/g' ref.bib
+
 # Generate `input.tex` via pandoc
 cd pdf
 pandoc -F pandoc-crossref --biblatex ../input.md \
@@ -61,17 +72,6 @@ pandoc -F pandoc-crossref --biblatex ../input.md \
 # Phrases with Chinese characters wrapped in quotation marks in `input.tex`
 perl -CSD -Mutf8 -i -pe 's/(``)([\w\p{P}\s]*\p{Han}+[\w\p{P}\s]*)('\'\'')/“\2”/g; \
 s/(`)([\w\p{P}\s]*\p{Han}+[\w\p{P}\s]*)('\'')/‘\2’/g' input.tex
-
-# Non-Chinese texts wrapped in quotation marks in `ref.bib`
-# Double
-perl -CSD -Mutf8 -i -pe 's/([“"])([a-zA-Z0-9\{])/``\2/g; \
-s/([a-zA-Z0-9\}])(["”])/\1'\'\''/g' ../ref.bib
-# Single
-perl -CSD -Mutf8 -i -pe 's/([‘'\''])([a-zA-Z0-9\{])/`\2/g; \
-s/([a-zA-Z0-9\}])(’)/\1'\''/g' ../ref.bib
-
-# The possessive form
-sed -i '' -E 's/([a-zA-Z\}])([`‘’])s/\1'\''s/g' ../ref.bib
 
 # Generate `main.pdf` via latexmk
 latexmk -xelatex main.tex -quiet
