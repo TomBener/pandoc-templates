@@ -3,6 +3,7 @@
 ############################################################################## HTML
 # Generate `main.html` via pandoc
 pandoc -s --self-contained -F pandoc-crossref \
+--csl gb-t-7714-2015-author-date.csl \
 -C -L lua-filters/rsbc.lua --toc \
 -c https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css \
 input.md -o html/main.html
@@ -10,8 +11,9 @@ input.md -o html/main.html
 ########################################################################################### DOCX
 # Generate `main.docx` via pandoc
 pandoc -F pandoc-crossref -C -N \
--M date="`date -u '+%Y年%m月%d日'`" \
+--csl gb-t-7714-2015-author-date.csl \
 --reference-doc docx/ref.docx \
+-M date="`date -u '+%Y年%m月%d日'`" \
 input.md -f markdown+autolink_bare_uris \
 -t docx -o docx/main.docx
 
@@ -47,7 +49,7 @@ rm -r docx/unzipped
 # Next Need to edit `main.docx` manually
 # 1. Sort the bibliography based on the pinyin of the author
 # 2. Set all Chinese texts wrapped as zh-CN 
-# or replace `“[、-﨩]*”` with `^&` (With language switch) to correct the quotation marks.
+# or find `“[、-﨩]*”`, then change the language to zh-CN
 
 ################################################################################################# PDF
 # Generate `input.tex` via pandoc

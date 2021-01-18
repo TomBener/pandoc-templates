@@ -1,10 +1,10 @@
 ---
 title: Input in Markdown, Outputs with DOCX, PDF and HTML
-reference-section-title: 参考文献
+author: TomBen
 bibliography: [ref.bib]
-csl: china-national-standard-gb-t-7714-2015-author-date.csl
 link-citations: true
 linkReferences: true
+reference-section-title: "参考文献"
 figPrefix: "图"
 tblPrefix: "表"
 figureTitle: "图"
