@@ -1,29 +1,29 @@
-#!/bin/bash
+#!/bin/sh
 
 ############################################################################## HTML
 # Generate `main.html` via pandoc
 pandoc -s --self-contained -F pandoc-crossref \
---csl gb-t-7714-2015-author-date.csl \
+--csl stylesheets/gb-t-7714-2015-author-date.csl \
 -C -L lua-filters/rsbc.lua --toc \
 -c https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css \
-input.md -o html/main.html
+input.md -o main.html
 
 ########################################################################################### DOCX
 # Generate `main.docx` via pandoc
 pandoc -F pandoc-crossref -C -N \
---csl gb-t-7714-2015-author-date.csl \
---reference-doc docx/ref.docx \
+--csl stylesheets/gb-t-7714-2015-author-date.csl \
+--reference-doc stylesheets/ref.docx \
 -M date="`date -u '+%Y年%m月%d日'`" \
 input.md -f markdown+autolink_bare_uris \
--t docx -o docx/main.docx
+-t docx -o main.docx
 
 # Unzip `main.docx` as the directory `unzipped`
-unzip -q docx/main.docx -d docx/unzipped
+unzip -q main.docx -d unzipped
 
 # Go to the directory `unzipped`
-cd docx/unzipped
+cd unzipped
 
-# Replace `et al.` with `等` for `main.docx`
+# Replace `et al.` with `等` for unzipped `main.docx`
 perl -CSD -Mutf8 -i -pe 's/(\p{Han})(,\s|\s)(et al.)/\1\2等/g' word/document.xml
 perl -CSD -Mutf8 -i -pe 's/(\p{Han}\s)(et al.)/\1等/g' word/footnotes.xml
 
@@ -44,7 +44,7 @@ zip -r -q ../main.docx *
 cd -
 
 # Remove the unzipped directories
-rm -r docx/unzipped
+rm -r unzipped
 
 # Next Need to edit `main.docx` manually
 # 1. Sort the bibliography based on the pinyin of authors
@@ -63,8 +63,10 @@ s/([a-zA-Z0-9\}])(’)/\1'\''/g' ref.bib
 # The possessive form
 sed -i '' -E 's/([a-zA-Z\}])([`‘’])s/\1'\''s/g' ref.bib
 
+# Go into the stylesheets directory
+cd stylesheets
+
 # Generate `input.tex` via pandoc
-cd pdf
 pandoc -F pandoc-crossref --biblatex ../input.md \
 -f markdown+smart+autolink_bare_uris \
 -t latex -o input.tex
@@ -76,6 +78,9 @@ s/(`)([\w\p{P}\s]*\p{Han}+[\w\p{P}\s]*)('\'')/‘\2’/g' input.tex
 # Generate `main.pdf` via latexmk
 latexmk -xelatex main.tex -quiet
 
+# Move generated pdf file to the main directory
+mv main.pdf ../
+
 # Remove auxiliary files
 latexmk -c
-rm *.bbl *.xml *.xdv
+rm *.bbl *.xml *.xdv input.tex
