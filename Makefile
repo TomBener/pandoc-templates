@@ -13,7 +13,7 @@ REFDOCX = --reference-doc stylesheets/ref.docx
 # Lua filters for renoving space
 RSBC = -L lua-filters/rsbc.lua
 
-# Pandoc options
+# Pandoc Markdown options
 EXTENSIONS = -f markdown+autolink_bare_uris
 
 # Pandoc Crossref
