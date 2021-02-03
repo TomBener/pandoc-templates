@@ -1,3 +1,4 @@
+-- https://pandoc.org/lua-filters.html#remove-spaces-before-citations
 local function is_space_before_author_in_text(spc, cite)
   return spc and spc.t == 'Space'
     and cite and cite.t == 'Cite'
