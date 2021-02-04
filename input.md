@@ -48,4 +48,4 @@ Table: 预期成果列表 {#tbl:thetbl}
 
 # Images
 
-![This is a dog](images/dog.jpg){#fig:thedog width=70% height=50%}
+![This is a dog](images/dog.jpg){#fig:thedog width=13cm}
