@@ -44,6 +44,13 @@ perl -CSD -Mutf8 -i -pe \
 's/([，。；！？”])(<\/w:t><\/w:r><w:r><w:t xml:space="preserve">)\s/\1/g' \
 word/document.xml
 
+# Tweaks for quotation marks wrapped in Chinese texts
+# Double quotation marks wrapped in Chinese texts
+perl -CSD -Mutf8 -i -pe 's/(<\/w:t>)(<\/w:r><w:r>)(<w:t xml:space="preserve">“<\/w:t><\/w:r><w:r><w:t xml:space="preserve">[\w\p{P}\s]*\p{Han}+[\w\p{P}\s]*)(<\/w:t>)(<\/w:r><w:r>)(<w:t xml:space="preserve">”)/\1<w:rPr><w:rFonts w:hint="eastAsia"\/><w:lang w:eastAsia="zh-CN"\/><\/w:rPr>\3\4<w:rPr><w:rFonts w:hint="eastAsia"\/><w:lang w:eastAsia="zh-CN"\/><\/w:rPr>\6/g' word/document.xml
+
+# Double or single quotation marks and wrapped Chinese texts
+perl -CSD -Mutf8 -i -pe 's/(<\/w:r><w:r>)(<w:t xml:space="preserve">)([\w\p{P}\s]*[“‘]\p{Han}+[”’][\w\p{P}\s]*)/<w:rPr><w:rFonts w:hint="eastAsia"\/><w:lang w:eastAsia="zh-CN"\/><\/w:rPr>\2\3/g' word/document.xml
+
 # zip `main.docx`
 zip -r -q ../main.docx *
 
@@ -69,6 +76,9 @@ s/([a-zA-Z0-9\}])(’)/\1'\''/g' ref.bib
 
 # The possessive form
 sed -i '' -E 's/([a-zA-Z\}])([`‘’])s/\1'\''s/g' ref.bib
+
+# Find and replace texts in `ref.bib` (for Better BibTeX exported from Zotero)
+#sed -i '' -e 's/@misc{/@online{/g; s|'"howpublished = {"'|'"url = {"'|g; s|'"note = {"'|'"urldate = {"'|g' ref.bib
 
 # Go into the stylesheets directory
 cd stylesheets
