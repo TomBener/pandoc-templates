@@ -1,11 +1,5 @@
-SRC = $(wildcard *.md)
-
 # CSL stylesheet
-CSL = --csl stylesheets/gb-t-7714-2015-author-date.csl
-
-# CSS stylesheet
-# CSS = -c stylesheets/github.css
-CSS = -c https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css
+CSL = --csl stylesheets/gbt7714-author-date.csl
 
 # DOCX template
 REFDOCX = --reference-doc stylesheets/ref.docx
@@ -25,47 +19,45 @@ ZIP = /usr/bin/zip
 # Directory path to unzipped docx
 PATH = unzipped/word
 
-## x.pdf depends on x.md, x.html depends on x.md, etc
-HTML = $(SRC:.md=.html)
-DOCX = $(SRC:.md=.docx)
-TEX = $(SRC:.md=.tex)
-PDF = $(SRC:.md=.pdf)
+# Perl with options
+PERL = perl -CSD -Mutf8 -i -pe
 
-all:	
-	$(MD) $(HTML) $(DOCX) $(TEX) $(PDFS)
-
-pdf:
-	clean $(PDFS)
-html:
-	clean $(HTML)
-tex:
-	clean $(TEX)
-docx:
-	clean $(DOCX)
+# Latexmk
+LMK = /usr/local/bin/latexmk
 
 .SILENT:
-main.docx: input.md
-	pandoc $(PCR) -C -N $(CSL) $(REFDOCX) $< $(EXTENSIONS) -t docx -o $@
+docx: input.md
+	pandoc $(PCR) -C -N $(CSL) $(REFDOCX) $< $(EXTENSIONS) -t docx -o main.$@
 	# Unzip `main.docx` as the directory `unzipped`
 	unzip -q main.docx -d unzipped
-	# Replace `et al.` with `等` for unzipped `main.docx`
-	perl -CSD -Mutf8 -i -pe 's/(\p{Han})(,\s|\s)(et al.)/\1\2等/g' $(PATH)/document.xml
-	perl -CSD -Mutf8 -i -pe 's/(\p{Han}\s)(et al.)/\1等/g' $(PATH)/footnotes.xml
+	# Replace `等` with `et al.` for unzipped `main.docx`
+	$(PERL) 's/([a-zA-Z])(,\s|\s)(等)/\1\2et al./g' $(PATH)/document.xml
+	$(PERL) 's/([z-zA-Z]\s)(等)/\1et al./g' $(PATH)/footnotes.xml
 
 	# Replace `版` with `ed` for the English bibliography in `main.docx`
-	perl -CSD -Mutf8 -i -pe \
+	$(PERL) \
 	's/(\w*|\w\p{P}*)(<\/w:t><\/w:r><w:r><w:t xml:space="preserve">)(\[M\].\s\d\s)版./\1\2\3ed./g' \
 	$(PATH)/document.xml
 
 	# Remove the space before inline citation at the beginning of a sentence in `main.docx`
-	perl -CSD -Mutf8 -i -pe \
+	$(PERL) \
 	's/([，。；！？”])(<\/w:t><\/w:r><w:r><w:t xml:space="preserve">)\s/\1/g' \
 	$(PATH)/document.xml
+
+	# Tweaks for quotation marks wrapped in Chinese texts
+	# Double quotation marks wrapped in Chinese texts
+	$(PERL) 's/(<\/w:t>)(<\/w:r><w:r>)(<w:t xml:space="preserve">“<\/w:t><\/w:r><w:r><w:t xml:space="preserve">[\w\p{P}\s]*\p{Han}+[\w\p{P}\s]*)(<\/w:t>)(<\/w:r><w:r>)(<w:t xml:space="preserve">”)/\1<w:rPr><w:rFonts w:hint="eastAsia"\/><w:lang w:eastAsia="zh-CN"\/><\/w:rPr>\3\4<w:rPr><w:rFonts w:hint="eastAsia"\/><w:lang w:eastAsia="zh-CN"\/><\/w:rPr>\6/g' $(PATH)/document.xml
+	
+	# Double or single quotation marks and wrapped Chinese texts
+	$(PERL) 's/(<\/w:r><w:r>)(<w:t xml:space="preserve">)([\w\p{P}\s]*[“‘]\p{Han}+[”’][\w\p{P}\s]*)/<w:rPr><w:rFonts w:hint="eastAsia"\/><w:lang w:eastAsia="zh-CN"\/><\/w:rPr>\2\3/g' $(PATH)/document.xml
 
 	# zip `main.docx`
 	cd unzipped; $(ZIP) -r -q ../main.docx *
 
-.PHONY: all clean
+	# Remove the unzipped directories
+	rm -r unzipped
+
+.PHONY: clean
 
 clean:
-	rm -f *.html *.pdf *.tex *.aux *.log
+	rm *html *.docx *.tex

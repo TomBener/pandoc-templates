@@ -1,8 +1,8 @@
 #!/bin/zsh
 
 ## The shell (I personally use zsh, more specifically, it's Oh My Zsh at https://ohmyz.sh) 
-## script for generating the HTML, DOCX and PDF from Markdown via Pandoc for Chinese users.
-## Tested on macOS Big Sur, it can be used on Linux with a few tweaks. While on Windows, 
+## script for generating the HTML, DOCX and PDF from Markdown via Pandoc for Chinese writing.
+## Tested on macOS Big Sur, it could be used on Linux with a few tweaks. While on Windows, 
 ## it is recommended to use WSL, which is available at https://docs.microsoft.com/windows/wsl/
 ## Author: TomBener
 ## Email: retompi@gmail.com
