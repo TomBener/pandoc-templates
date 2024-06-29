@@ -1,5 +1,8 @@
 # Pandoc Templates
 
+> [!NOTE]
+> This repo may be obsolete and has been archived. Please refer to the [new repo](https://github.com/TomBener/quarto-cn-tools) for using [Quarto](https://quarto.org) to write academic papers in Chinese.
+
 Pandoc templates to convert Markdown files to DOCX, PDF or HTML for academic writing, especially for Chinese writing.
 
 > 🔗 [Markdown 写作，Pandoc 转换：我的纯文本学术写作流程 - 少数派](https://sspai.com/post/64842)
